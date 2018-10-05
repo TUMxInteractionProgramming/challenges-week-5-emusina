@@ -78,8 +78,14 @@ function selectTab(tabId) {
 /**
  * toggle (show/hide) the emojis menu
  */
+
 function toggleEmojis() {
     $('#emojis').toggle(); // #toggle
+     /* add all emojis from the array to the emoji menu */
+     var emojis = require('emojis-list');
+     $('#emojis').append(emojis);
+    // console.log(emojis);
+    
 }
 
 /**
@@ -108,9 +114,14 @@ function sendMessage() {
     // #8 let's now use the real message #input
     var message = new Message($('#message').val());
     console.log("New message:", message);
+    /* block message when input value is empty */
+    if(message.text < 1){
+        alert('Please insert a message to send');
+    } else {
 
     // #8 convenient message append with jQuery:
     $('#messages').append(createMessageElement(message));
+    console.log(currentChannel.push(message));
 
     // #8 messages will scroll to a certain point if we apply a certain height, in this case the overall scrollHeight of the messages-div that increases with every message;
     // it would also scroll to the bottom when using a very high number (e.g. 1000000000);
@@ -118,6 +129,7 @@ function sendMessage() {
 
     // #8 clear the message input
     $('#message').val('');
+    }
 }
 
 /**
@@ -150,11 +162,18 @@ function listChannels() {
     //$('#channels ul').append("<li>New Channel</li>")
 
     // #8 five new channels
-    $('#channels ul').append(createChannelElement(yummy));
+  /*  $('#channels ul').append(createChannelElement(yummy));
     $('#channels ul').append(createChannelElement(sevencontinents));
     $('#channels ul').append(createChannelElement(killerapp));
     $('#channels ul').append(createChannelElement(firstpersononmars));
-    $('#channels ul').append(createChannelElement(octoberfest));
+    $('#channels ul').append(createChannelElement(octoberfest)); */
+    
+    // use a for loop to append channels to channel list
+    
+    for(i=0; i < channels.length; i++){
+       $('#channels ul').append(createChannelElement(channels[i]));
+       // console.log(channels[i]);
+    }
 }
 
 /**
@@ -193,3 +212,25 @@ function createChannelElement(channelObject) {
     // return the complete channel
     return channel;
 }
+
+/* @param criterion */
+
+function listChannels(criterion) {
+    for (var i=0; i < channels.length; i++) {
+        console.log('add channel:', channels[i]);
+        $('#channels ul').append(createChannelElement(channels[i]));
+    }
+    channels.sort(criterion);
+};
+
+/* function to compare trending channels */
+
+ function compareTrending(channels) {
+    for (var i=0; i < channels.length; i++) {
+     if (channels[i].messageCount < channels[i].messageCount) {
+         return -1;
+     } else {
+         return 1;
+     }
+    } 
+ }
